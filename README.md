@@ -218,3 +218,112 @@ To achieve First Normal Form:
 All attributes were made atomic
 Repeating groups were removed
 Each row was made uniquely identifiable using a primary key
+PARKING_BOOKING_1NF
+
+(PK) booking_id
+city_name
+state
+location_name
+location_address
+zone_name
+floor_level
+slot_number
+slot_type_name
+base_hourly_rate
+user_name
+phone_number
+email
+vehicle_registration_number
+vehicle_type
+booking_start_time
+booking_end_time
+booking_type
+booking_status
+entry_time
+exit_time
+payment_method
+amount_paid
+payment_status
+violation_type
+penalty_amount
+
+Reasoning
+At this stage, each row represents a single parking booking event, and all values are atomic.
+However, the table still contains significant redundancy.
+
+Business limitations still remain:
+Pricing changes would require updating multiple rows
+User or vehicle updates risk inconsistencies
+Revenue analysis across locations or slot types is inefficient
+
+5.3 Second Normal Form (2NF)
+
+To move to Second Normal Form, I removed partial dependencies by ensuring that every non-key
+attribute depends entirely on the primary key of its table.
+
+This led to separating distinct business entities such as city, user, vehicle, slot, and booking
+into individual tables.
+
+CITY (city_id, city_name, state)
+PARKING_LOCATION (location_id, city_id, location_name, address, total_capacity)
+USER (user_id, full_name, phone_number, email)
+VEHICLE (vehicle_id, user_id, registration_number, vehicle_type)
+SLOT_TYPE (slot_type_id, slot_type_name, base_hourly_rate)
+PARKING_SLOT (slot_id, zone_id, slot_type_id, slot_number, is_active)
+BOOKING (booking_id, user_id, vehicle_id, slot_id, booking_start_time, booking_end_time, booking_type, booking_status)
+PAYMENT (payment_id, booking_id, amount_paid, payment_status)
+VIOLATION (violation_id, booking_id, violation_type, penalty_amount)
+
+Reasoning
+Each table now represents one clear business concept:
+Identity data is owned by User and Vehicle
+Pricing data is owned by Slot_Type
+Transactions are owned by Booking and Payment
+
+5.4 Third Normal Form (3NF)
+
+To achieve Third Normal Form, I removed transitive dependencies, ensuring that non-key
+attributes do not depend on other non-key attributes.
+Additional decomposition included:
+Separating Payment_Method from Payment
+Separating Parking_Zone from Parking_Location
+Moving entry and exit timestamps into a dedicated log table
+
+PARKING_ZONE (zone_id, location_id, zone_name, floor_level)
+PAYMENT_METHOD (payment_method_id, method_name)
+PAYMENT (payment_id, booking_id, payment_method_id, amount_paid, payment_time, payment_status)
+ENTRY_EXIT_LOG (log_id, booking_id, entry_time, exit_time)
+
+Reasoning
+This structure ensures:
+Payment method details are not repeated
+Zone-level analysis is possible without redundancy
+Billing duration is derived from a dedicated operational log
+
+5.5 Boyce–Codd Normal Form (BCNF)
+
+The final schema conforms to Boyce–Codd Normal Form, where for every functional dependency, the
+determinant is a candidate key.
+
+Examples:
+Slot pricing depends solely on slot_type_id
+Payment method details depend solely on payment_method_id
+Entry and exit times depend solely on booking_id
+Violation penalties depend solely on violation_id
+No table contains overlapping responsibilities or hidden dependencies.
+Business Impact
+Achieving BCNF ensures:
+Accurate revenue reporting
+Safe updates to pricing and user data
+Strong data integrity for analytics and auditing
+Scalability across multiple cities and parking hubs
+
+
+5.6 Normalization Outcome
+By normalizing the database up to BCNF:
+Redundancy was eliminated
+Data anomalies were prevented
+Revenue and operational analytics were simplified
+The schema aligned cleanly with the ER diagram
+This normalized design supports real-world parking operations for a mobility platform while
+remaining flexible for future expansion.
