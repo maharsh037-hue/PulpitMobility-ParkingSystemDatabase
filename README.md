@@ -169,6 +169,20 @@ Attributes:
 - violation_time
 
 
+## 5. Normalization Process and Design Reasoning
+
+The database was normalized step by step to eliminate redundancy, avoid data anomalies, and ensure
+that the system can scale while supporting accurate operational and revenue analytics. Each
+normalization stage reflects a deliberate design decision rather than a mechanical transformation.
+
+---
+
+### 5.1 Unnormalized Form (UNF)
+
+At the initial stage, parking data can exist in a single flat structure similar to spreadsheets
+used in early or manual systems.
+
+```text
 UNF_PARKING_DATA
 
 city_name
@@ -196,23 +210,3 @@ amount_paid
 payment_status
 violation_type
 penalty_amount
-
-In this unnormalized structure:
-
-City and location details repeat for every booking
-
-Slot type pricing repeats for each slot
-
-User and vehicle details repeat across bookings
-
-Payment and violation data are mixed with booking data
-
-From a business perspective, this causes:
-
-Revenue reporting inconsistencies
-
-Update anomalies (price change affects many rows)
-
-Storage inefficiency
-
-High risk of data inconsistency
