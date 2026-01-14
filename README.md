@@ -168,3 +168,51 @@ Attributes:
 - penalty_amount
 - violation_time
 
+
+UNF_PARKING_DATA
+
+city_name
+state
+location_name
+location_address
+zone_name
+floor_level
+slot_number
+slot_type_name
+base_hourly_rate
+user_name
+phone_number
+email
+vehicle_registration_number
+vehicle_type
+booking_start_time
+booking_end_time
+booking_type
+booking_status
+entry_time
+exit_time
+payment_method
+amount_paid
+payment_status
+violation_type
+penalty_amount
+
+In this unnormalized structure:
+
+City and location details repeat for every booking
+
+Slot type pricing repeats for each slot
+
+User and vehicle details repeat across bookings
+
+Payment and violation data are mixed with booking data
+
+From a business perspective, this causes:
+
+Revenue reporting inconsistencies
+
+Update anomalies (price change affects many rows)
+
+Storage inefficiency
+
+High risk of data inconsistency
