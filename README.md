@@ -210,3 +210,11 @@ amount_paid
 payment_status
 violation_type
 penalty_amount
+
+
+
+5.2 First Normal Form (1NF)
+To achieve First Normal Form:
+All attributes were made atomic
+Repeating groups were removed
+Each row was made uniquely identifiable using a primary key
